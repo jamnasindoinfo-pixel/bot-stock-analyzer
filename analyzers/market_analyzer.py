@@ -4,8 +4,9 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import yfinance as yf
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Tuple
 import MetaTrader5 as mt5
+from copy import deepcopy
 
 class MarketAnalyzer:
     def __init__(self, news_api_key: str = None, te_key: str = None):
@@ -30,20 +31,74 @@ class MarketAnalyzer:
                 }
             }
         
+        strategy_info = self._resolve_strategy_profile(symbol, config)
+
         analysis = {
             'technical': self._analyze_technical(df),
             'patterns': self._detect_candlestick_patterns(df),
             'breakout': self._detect_breakouts(df),
             'support_resistance': self._find_support_resistance(df),
             'scalping': self._scalping_signals(df),
-            'news': self._analyze_news_simple(symbol),  # Simplified
+            'stock_strategy': {'signal': 'WAIT', 'reasons': []},
+            'news': self._analyze_news_simple(symbol, config),
             'calendar': self._get_economic_calendar_light(config),  # Lighter version
-            'overall': {'signal': 'WAIT', 'strength': 0, 'reasons': []}
+            'overall': {'signal': 'WAIT', 'strength': 0, 'reasons': []},
+            'strategy': strategy_info
         }
+
+        current_cfg = config.get('current', {})
+        if current_cfg.get('instrument_type', '').lower() == 'stock':
+            stock_cfg = current_cfg.get('stock_strategy', {})
+            if not stock_cfg and strategy_info['params']:
+                stock_cfg = strategy_info['params']
+            if stock_cfg.get('enable', False):
+                analysis['stock_strategy'] = self._analyze_stock_breakout(df, stock_cfg)
         
         # Combine all analyses
-        analysis['overall'] = self._combine_signals_aggressive(analysis, config)
+        analysis['overall'] = self._combine_signals_aggressive(analysis, config, strategy_info)
         return analysis
+
+    def _resolve_strategy_profile(self, symbol: str, config: Optional[dict]) -> Dict:
+        current_cfg = (config or {}).get('current', {})
+        profiles = (config or {}).get('strategy_profiles', {})
+        profile_key = (current_cfg.get('strategy_profile') or 'aggressive').lower()
+
+        profile = profiles.get(profile_key)
+        if not profile and profiles:
+            profile_key, profile = next(iter(profiles.items()))
+
+        params = {}
+        weights = {}
+        min_threshold = current_cfg.get('min_signal_strength', 0.1)
+        label = profile_key.title()
+        description = ''
+
+        if profile:
+            params = deepcopy(profile.get('params', profile))
+            weights = deepcopy(profile.get('weights', {}))
+            min_threshold = profile.get('min_threshold', min_threshold)
+            label = profile.get('label', label)
+            description = profile.get('description', description)
+
+        base_params = current_cfg.get('stock_strategy', {})
+        if base_params:
+            merged = deepcopy(params) if params else {}
+            # preserve enable flag from base config if provided
+            if 'enable' in base_params:
+                merged['enable'] = base_params['enable']
+            merged.update({k: v for k, v in base_params.items() if k != 'enable'})
+            params = merged
+        if 'enable' not in params:
+            params['enable'] = True
+
+        return {
+            'key': profile_key,
+            'label': label,
+            'description': description,
+            'params': params,
+            'weights': weights,
+            'min_threshold': min_threshold
+        }
     
     def _analyze_technical(self, df: pd.DataFrame) -> Dict:
         """Fast technical analysis for aggressive trading"""
@@ -370,14 +425,181 @@ class MarketAnalyzer:
             'signals': signals,
             'score': score
         }
-    
-    def _analyze_news_simple(self, symbol: str) -> Dict:
-        """Simplified news analysis - less restrictive"""
-        # Skip news for faster execution in aggressive mode
+
+    def _analyze_stock_breakout(self, df: pd.DataFrame, params: Dict) -> Dict:
+        if df.empty or len(df) < max(params.get('ema_slow', 50), params.get('lookback_breakout', 20)) + 1:
+            return {'signal': 'WAIT', 'reasons': [], 'volume_ratio': 0, 'trend': 'FLAT'}
+
+        ema_fast = params.get('ema_fast', 20)
+        ema_slow = params.get('ema_slow', 50)
+        lookback = params.get('lookback_breakout', 20)
+        volume_multiplier = params.get('volume_multiplier', 1.5)
+        atr_period = params.get('atr_period', 14)
+        atr_multiplier = params.get('atr_multiplier', 1.5)
+        rsi_period = params.get('rsi_period', 14)
+        rsi_max_buy = params.get('rsi_max_buy', 65)
+        rsi_min_sell = params.get('rsi_min_sell', 35)
+
+        closes = df['close']
+        df['EMA_FAST'] = closes.ewm(span=ema_fast).mean()
+        df['EMA_SLOW'] = closes.ewm(span=ema_slow).mean()
+        df['RSI_STOCK'] = self._calculate_rsi(closes, period=rsi_period)
+
+        recent_high = df['high'].iloc[-(lookback + 1):-1].max()
+        recent_low = df['low'].iloc[-(lookback + 1):-1].min()
+
+        last_close = closes.iloc[-1]
+        last_volume = df['tick_volume'].iloc[-1] if 'tick_volume' in df else df['volume'].iloc[-1]
+        volume_slice = df['tick_volume'].iloc[-(lookback + 1):-1] if 'tick_volume' in df else df['volume'].iloc[-(lookback + 1):-1]
+        avg_volume = volume_slice.mean() if len(volume_slice) else 0
+        volume_ratio = last_volume / avg_volume if avg_volume else 0
+
+        ema_fast_last = df['EMA_FAST'].iloc[-1]
+        ema_slow_last = df['EMA_SLOW'].iloc[-1]
+        rsi_last = df['RSI_STOCK'].iloc[-1]
+
+        trend = 'UP' if ema_fast_last > ema_slow_last else 'DOWN'
+        atr = self._calculate_atr_value(df, period=atr_period)
+        stop_buffer = atr * atr_multiplier
+        take_buffer = stop_buffer * 2
+
+        reasons = []
+        signal = 'WAIT'
+
+        if last_close > recent_high and trend == 'UP' and volume_ratio >= volume_multiplier and rsi_last <= rsi_max_buy:
+            signal = 'BUY'
+            reasons.append(f"Breakout {last_close:.2f} > {recent_high:.2f}")
+            reasons.append(f"EMA {ema_fast_last:.2f}>{ema_slow_last:.2f}")
+            reasons.append(f"Volume x{volume_ratio:.2f}")
+        elif last_close < recent_low and trend == 'DOWN' and volume_ratio >= volume_multiplier and rsi_last >= rsi_min_sell:
+            signal = 'SELL'
+            reasons.append(f"Breakdown {last_close:.2f} < {recent_low:.2f}")
+            reasons.append(f"EMA {ema_fast_last:.2f}<{ema_slow_last:.2f}")
+            reasons.append(f"Volume x{volume_ratio:.2f}")
+
         return {
+            'signal': signal,
+            'reasons': reasons,
+            'trend': trend,
+            'volume_ratio': volume_ratio,
+            'breakout_level': recent_high,
+            'breakdown_level': recent_low,
+            'atr': atr,
+            'stop_buffer': stop_buffer,
+            'take_buffer': take_buffer,
+            'rsi': rsi_last
+        }
+    
+    def _analyze_news_simple(self, symbol: str, config: Optional[dict] = None) -> Dict:
+        """Fetch basic news sentiment using NewsAPI when available."""
+        default = {
             'impact': 'NEUTRAL',
-            'sentiment_score': 0,
-            'headlines': []
+            'sentiment_score': 0.0,
+            'headlines': [],
+            'summary': 'Berita relevan tidak ditemukan atau kunci API tidak tersedia.'
+        }
+
+        if not self.news_api_key:
+            return default
+
+        alias_map = (config or {}).get('current', {}).get('symbol_aliases', {}) if config else {}
+        alias = alias_map.get(symbol, '')
+
+        search_terms: List[str] = []
+        for term in [symbol, alias]:
+            if term and term not in search_terms:
+                search_terms.append(term)
+            cleaned = term.replace('.JK', '') if term else ''
+            if cleaned and cleaned not in search_terms:
+                search_terms.append(cleaned)
+
+        if not search_terms:
+            search_terms.append(symbol)
+
+        url = "https://newsapi.org/v2/everything"
+        articles: List[Dict] = []
+        last_error = None
+
+        for term in search_terms:
+            if not term:
+                continue
+            for language in ('id', 'en'):
+                params = {
+                    'q': term,
+                    'language': language,
+                    'sortBy': 'publishedAt',
+                    'pageSize': 5,
+                    'apiKey': self.news_api_key,
+                }
+                try:
+                    response = requests.get(url, params=params, timeout=10)
+                    response.raise_for_status()
+                    data = response.json()
+                except requests.RequestException as exc:
+                    last_error = exc
+                    continue
+
+                fetched = data.get('articles') or []
+                if fetched:
+                    articles = fetched
+                    break
+            if articles:
+                break
+
+        if not articles:
+            if last_error is not None:
+                return {**default, 'summary': 'Gagal mengambil berita terbaru.'}
+            return default
+
+        headlines: List[str] = []
+        combined_texts: List[str] = []
+        for article in articles[:5]:
+            title = article.get('title') or ''
+            description = article.get('description') or ''
+            if title:
+                headlines.append(title.strip())
+            combined_texts.append(f"{title}. {description}".strip())
+
+        text_blob = " ".join(combined_texts).lower()
+        positive_keywords = [
+            'kenaikan', 'bullish', 'positif', 'rebound', 'rebound kuat', 'laba',
+            'pertumbuhan', 'optimis', 'strong', 'menguat'
+        ]
+        negative_keywords = [
+            'penurunan', 'bearish', 'negatif', 'rugi', 'kerugian', 'melemah',
+            'tekanan', 'jatuh', 'turun tajam', 'collapse'
+        ]
+
+        score = 0
+        for word in positive_keywords:
+            if word in text_blob:
+                score += 1
+        for word in negative_keywords:
+            if word in text_blob:
+                score -= 1
+
+        if score > 1:
+            impact = 'POSITIVE'
+        elif score < -1:
+            impact = 'NEGATIVE'
+        else:
+            impact = 'NEUTRAL'
+
+        summary_lines = []
+        for article in articles[:3]:
+            title = article.get('title') or ''
+            desc = article.get('description') or ''
+            published = article.get('publishedAt') or ''
+            source = (article.get('source') or {}).get('name', '')
+            summary_lines.append(
+                f"- {title.strip()} ({source} {published[:10]}): {desc.strip()}"
+            )
+
+        return {
+            'impact': impact,
+            'sentiment_score': float(score),
+            'headlines': headlines,
+            'summary': "\n".join(summary_lines) if summary_lines else default['summary']
         }
     
     def _get_economic_calendar_light(self, config: dict) -> Dict:
@@ -398,61 +620,102 @@ class MarketAnalyzer:
             'should_reduce_confidence': False  # Don't reduce confidence!
         }
     
-    def _combine_signals_aggressive(self, analysis: Dict, config: dict) -> Dict:
+    def _combine_signals_aggressive(self, analysis: Dict, config: dict, strategy_info: Optional[Dict] = None) -> Dict:
         """Combine signals with AGGRESSIVE strategy - more trades!"""
         
         strength = 0
         reasons = []
         
-        min_threshold = config.get('current', {}).get('min_signal_strength', 0.1)
+        current_cfg = config.get('current', {})
+        min_threshold = current_cfg.get('min_signal_strength', 0.1)
+        weights = {
+            'technical': 0.3,
+            'patterns': 0.25,
+            'breakout': 0.2,
+            'support_resistance': 0.15,
+            'scalping': 0.1,
+            'stock_strategy': 0.25,
+            'news': 0.1
+        }
+        if strategy_info:
+            if strategy_info.get('min_threshold') is not None:
+                min_threshold = strategy_info['min_threshold']
+            weights.update({k: v for k, v in (strategy_info.get('weights') or {}).items() if isinstance(v, (int, float))})
         
         # Technical: 30% (reduced from 50%)
         tech = analysis['technical']
         if tech['signal'] == 'BUY':
-            strength += 0.3
+            strength += weights.get('technical', 0)
             reasons.append(f"✅ Technical BUY ({tech['bullish']}/{tech['bearish']})")
         elif tech['signal'] == 'SELL':
-            strength -= 0.3
+            strength -= weights.get('technical', 0)
             reasons.append(f"❌ Technical SELL ({tech['bearish']}/{tech['bullish']})")
         
         # Patterns: 25%
         patterns = analysis.get('patterns', {})
         if patterns.get('count', 0) > 0:
             if patterns['signal'] == 'BUY':
-                strength += 0.25
+                strength += weights.get('patterns', 0)
                 reasons.append(f"✅ Pattern: {', '.join(patterns['patterns'][:2])}")
             elif patterns['signal'] == 'SELL':
-                strength -= 0.25
+                strength -= weights.get('patterns', 0)
                 reasons.append(f"❌ Pattern: {', '.join(patterns['patterns'][:2])}")
         
         # Breakout: 20%
         breakout = analysis.get('breakout', {})
         if breakout.get('count', 0) > 0:
             if breakout['signal'] == 'BUY':
-                strength += 0.2
+                strength += weights.get('breakout', 0)
                 reasons.append(f"✅ Breakout UP")
             elif breakout['signal'] == 'SELL':
-                strength -= 0.2
+                strength -= weights.get('breakout', 0)
                 reasons.append(f"❌ Breakout DOWN")
         
         # Support/Resistance: 15%
         sr = analysis.get('support_resistance', {})
         if sr.get('signal') == 'BUY':
-            strength += 0.15
+            strength += weights.get('support_resistance', 0)
             reasons.append(f"✅ Near Support")
         elif sr.get('signal') == 'SELL':
-            strength -= 0.15
+            strength -= weights.get('support_resistance', 0)
             reasons.append(f"❌ Near Resistance")
         
         # Scalping: 10%
         scalp = analysis.get('scalping', {})
         if scalp.get('score', 0) >= 2:
-            strength += 0.1
+            strength += weights.get('scalping', 0)
             reasons.append(f"✅ Scalping signals")
         elif scalp.get('score', 0) <= -2:
-            strength -= 0.1
+            strength -= weights.get('scalping', 0)
             reasons.append(f"❌ Scalping signals")
+
+        instrument_type = config.get('current', {}).get('instrument_type', '').lower()
+        stock_cfg = config.get('current', {}).get('stock_strategy', {})
+        if instrument_type == 'stock' and stock_cfg.get('enable', False):
+            stock_signal = analysis.get('stock_strategy', {})
+            vol_ratio = stock_signal.get('volume_ratio', 0)
+            if stock_signal.get('signal') == 'BUY':
+                strength += weights.get('stock_strategy', 0)
+                reasons.append(f"✅ Stock breakout vol x{vol_ratio:.2f}")
+            elif stock_signal.get('signal') == 'SELL':
+                strength -= weights.get('stock_strategy', 0)
+                reasons.append(f"❌ Stock breakdown vol x{vol_ratio:.2f}")
         
+        # News sentiment weighting
+        news = analysis.get('news', {})
+        news_weight = weights.get('news', 0)
+        if news_weight:
+            impact = (news.get('impact') or '').upper()
+            sentiment_score = news.get('sentiment_score', 0)
+            if impact == 'POSITIVE' or sentiment_score > 0:
+                strength += news_weight
+                reasons.append("✅ Sentimen berita mendukung tren")
+            elif impact == 'NEGATIVE' or sentiment_score < 0:
+                strength -= news_weight
+                reasons.append("❌ Sentimen berita menekan harga")
+            else:
+                reasons.append("ℹ️ Berita netral, tidak berdampak signifikan")
+
         # Economic calendar - DON'T reduce strength much
         calendar = analysis.get('calendar', {})
         if calendar.get('should_reduce_confidence', False):

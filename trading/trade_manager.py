@@ -9,6 +9,10 @@ class TradeManager:
     def __init__(self, config: Dict):
         self.config = config
         self.positions = {}
+        current_cfg = config.get('current', {})
+        self.instrument_type = current_cfg.get('instrument_type', '').lower()
+        self.stock_sl_pct = current_cfg.get('stock_sl_pct', 0.02)
+        self.stock_tp_pct = current_cfg.get('stock_tp_pct', 0.05)
         
     def place_order(self, signal: Dict) -> Dict:
         """Place order with proper SL/TP calculation"""
@@ -40,21 +44,17 @@ class TradeManager:
             digits = symbol_info.digits
             stops_level = symbol_info.trade_stops_level
             
-            # Calculate ATR for dynamic SL/TP
             atr = self._calculate_atr(symbol)
-            
-            # For Gold (XAUUSD), ATR is typically 5-15
-            # For Forex pairs, ATR is 0.0005-0.0020
-            
-            # Determine if this is Gold/Commodity or Forex
-            if 'XAU' in symbol or 'GOLD' in symbol:
-                # Gold - use dollar-based SL/TP
-                sl_distance = max(atr * 1.5, 3.0)  # Min $3 SL
-                tp_distance = max(atr * 2.0, 5.0)  # Min $5 TP
+
+            if self.instrument_type == 'stock':
+                sl_distance = max(price * self.stock_sl_pct, point * 2)
+                tp_distance = max(price * self.stock_tp_pct, point * 4)
+            elif 'XAU' in symbol or 'GOLD' in symbol:
+                sl_distance = max(atr * 1.5, 3.0)
+                tp_distance = max(atr * 2.0, 5.0)
             else:
-                # Forex - use pip-based SL/TP
-                sl_pips = max(int(atr / point * 1.5), 20)  # Min 20 pips
-                tp_pips = max(int(atr / point * 2.0), 40)  # Min 40 pips
+                sl_pips = max(int(atr / point * 1.5), 20)
+                tp_pips = max(int(atr / point * 2.0), 40)
                 sl_distance = sl_pips * point
                 tp_distance = tp_pips * point
             

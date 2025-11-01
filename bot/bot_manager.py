@@ -6,7 +6,8 @@ import MetaTrader5 as mt5
 import pandas as pd
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+import yfinance as yf
+from zoneinfo import ZoneInfo
 class TradingBot:
     def __init__(self, config: Dict, analyzer, trader, gemini_client=None):
         self.config = config
@@ -52,6 +53,31 @@ class TradingBot:
         # Dynamic lot sizing
         self.dynamic_lot_sizing = config.get('current', {}).get('dynamic_lot_sizing', False)
         self.risk_percent = config.get('current', {}).get('risk_percent_per_trade', 1.0)
+
+        # Data source configuration
+        self.data_source = config.get('current', {}).get('data_source', 'mt5').lower()
+        self.symbol_aliases = config.get('current', {}).get('symbol_aliases', {})
+        self.market_timezone = config.get('current', {}).get('market_timezone', 'Asia/Jakarta')
+        self.instrument_type = config.get('current', {}).get('instrument_type', '').lower()
+        self.stock_sl_pct = config.get('current', {}).get('stock_sl_pct', 0.02)
+        self.stock_tp_pct = config.get('current', {}).get('stock_tp_pct', 0.05)
+        market_sessions_cfg = config.get('current', {}).get('market_sessions', [])
+        if not isinstance(self.symbol_aliases, dict):
+            self.symbol_aliases = {}
+        try:
+            self.market_tz = ZoneInfo(self.market_timezone)
+        except Exception:
+            self.market_tz = None
+        self.market_sessions = []
+        for session in market_sessions_cfg:
+            if not isinstance(session, list) or len(session) != 2:
+                continue
+            try:
+                start = datetime.strptime(session[0], "%H:%M").time()
+                end = datetime.strptime(session[1], "%H:%M").time()
+                self.market_sessions.append((start, end))
+            except ValueError:
+                continue
         
         # Check interval
         self.check_interval = config.get('current', {}).get('auto_analyze_interval', 1) * 60
@@ -348,42 +374,46 @@ class TradingBot:
             account = mt5.account_info()
             if not account:
                 return self.config['current']['lot']
-            
-            # Use starting balance for consistency
+
             balance = self.starting_balance
-            
-            # Calculate risk amount
             risk_amount = balance * (self.risk_percent / 100)
-            
-            # Get symbol info
+
             symbol_info = mt5.symbol_info(symbol)
             if not symbol_info:
                 return self.config['current']['lot']
-            
-            # Estimate SL distance in USD
-            # For Gold: typically $8-15 SL
-            # For Forex: calculate based on pip value
-            
-            if 'XAU' in symbol or 'GOLD' in symbol:
-                sl_distance_usd = 10.0  # Average $10 SL for gold
+
+            tick = mt5.symbol_info_tick(symbol)
+            price = None
+            if tick:
+                price = tick.ask or tick.bid
+            if not price:
+                price = symbol_info.ask or symbol_info.bid or symbol_info.last
+            if not price:
+                return self.config['current']['lot']
+
+            if self.instrument_type == 'stock':
+                contract_size = symbol_info.trade_contract_size or 1.0
+                sl_distance = price * self.stock_sl_pct
+                if sl_distance <= 0:
+                    return self.config['current']['lot']
+                sl_distance_usd = sl_distance * contract_size
+            elif 'XAU' in symbol or 'GOLD' in symbol:
+                sl_distance_usd = 10.0
             elif 'BTC' in symbol:
-                sl_distance_usd = 500.0  # Bitcoin
+                sl_distance_usd = 500.0
             else:
-                # Forex - estimate
-                sl_distance_usd = 20.0  # Approximate for forex
-            
-            # Calculate lot size: risk_amount / sl_distance
-            calculated_lot = risk_amount / sl_distance_usd
-            
-            # Round to valid lot size
-            calculated_lot = round(calculated_lot, 2)
-            
-            # Ensure within limits
-            min_lot = symbol_info.volume_min
-            max_lot = min(symbol_info.volume_max, 0.1)  # Cap at 0.1 for safety
-            
+                sl_distance_usd = 20.0
+
+            calculated_lot = risk_amount / max(sl_distance_usd, 1e-6)
+
+            volume_step = symbol_info.volume_step or 0.01
+            min_lot = symbol_info.volume_min or volume_step
+            max_lot = symbol_info.volume_max or min_lot
+
+            steps = max(1, round(calculated_lot / volume_step))
+            calculated_lot = steps * volume_step
             calculated_lot = max(min_lot, min(calculated_lot, max_lot))
-            
+
             return calculated_lot
             
         except Exception as e:
@@ -465,7 +495,15 @@ class TradingBot:
         
         if self.config.get('current', {}).get('trade_always_on', True):
             return True
-        
+
+        if self.market_tz and self.market_sessions:
+            now_local = datetime.now(self.market_tz)
+            current_time = now_local.time()
+            for start, end in self.market_sessions:
+                if start <= current_time <= end:
+                    return True
+            return False
+
         now = datetime.now()
         return 1 <= now.hour < 23
     
@@ -478,6 +516,21 @@ class TradingBot:
     
     def _get_market_data_for(self, symbol: str, timeframe: str) -> pd.DataFrame:
         """Get market data for specific symbol/timeframe"""
+        source = self.data_source
+
+        if source == 'yfinance':
+            return self._get_market_data_yf(symbol, timeframe)
+
+        df_mt5 = self._get_market_data_mt5(symbol, timeframe)
+        if not df_mt5.empty:
+            return df_mt5
+
+        if source in ('auto', 'yfinance'):
+            return self._get_market_data_yf(symbol, timeframe)
+
+        return df_mt5
+
+    def _get_market_data_mt5(self, symbol: str, timeframe: str) -> pd.DataFrame:
         try:
             tf_map = {
                 'M1': mt5.TIMEFRAME_M1,
@@ -488,22 +541,88 @@ class TradingBot:
                 'H4': mt5.TIMEFRAME_H4,
                 'D1': mt5.TIMEFRAME_D1
             }
-            
+
             mt5_tf = tf_map.get(timeframe, mt5.TIMEFRAME_M5)
             candles = self.config['current']['candles']
-            
+
             rates = mt5.copy_rates_from_pos(symbol, mt5_tf, 0, candles)
-            
             if rates is None or len(rates) == 0:
                 return pd.DataFrame()
-            
+
             df = pd.DataFrame(rates)
             df['time'] = pd.to_datetime(df['time'], unit='s')
-            
             return df
-            
-        except Exception as e:
+
+        except Exception:
             return pd.DataFrame()
+
+    def _get_market_data_yf(self, symbol: str, timeframe: str) -> pd.DataFrame:
+        try:
+            yf_symbol = self._resolve_yf_symbol(symbol)
+
+            interval_map = {
+                'M1': ('1m', '2d'),
+                'M5': ('5m', '5d'),
+                'M15': ('15m', '1mo'),
+                'M30': ('30m', '1mo'),
+                'H1': ('60m', '1mo'),
+                'H4': ('60m', '2mo'),
+                'D1': ('1d', '1y')
+            }
+
+            interval, period = interval_map.get(timeframe, ('1d', '1y'))
+            data = yf.download(
+                tickers=yf_symbol,
+                period=period,
+                interval=interval,
+                auto_adjust=False,
+                prepost=False
+            )
+
+            if data is None or data.empty:
+                return pd.DataFrame()
+
+            data.index = pd.to_datetime(data.index)
+            if data.index.tz is not None:
+                data.index = data.index.tz_convert(self.market_timezone).tz_localize(None)
+
+            if timeframe == 'H4':
+                data = data[['Open', 'High', 'Low', 'Close', 'Volume']].resample('4H').agg({
+                    'Open': 'first',
+                    'High': 'max',
+                    'Low': 'min',
+                    'Close': 'last',
+                    'Volume': 'sum'
+                }).dropna()
+
+            data = data.tail(self.config['current'].get('candles', 100))
+            data = data.rename(columns={
+                'Open': 'open',
+                'High': 'high',
+                'Low': 'low',
+                'Close': 'close',
+                'Adj Close': 'adj_close',
+                'Volume': 'tick_volume'
+            })
+
+            df = data.reset_index().rename(columns={'index': 'time', 'Datetime': 'time'})
+            df['time'] = pd.to_datetime(df['time'])
+            df = df.drop(columns=['adj_close'], errors='ignore')
+            df['tick_volume'] = df['tick_volume'].fillna(0)
+            return df
+
+        except Exception:
+            return pd.DataFrame()
+
+    def _resolve_yf_symbol(self, symbol: str) -> str:
+        alias = self.symbol_aliases.get(symbol)
+        if isinstance(alias, str) and alias:
+            return alias
+
+        if '.' in symbol:
+            return symbol
+
+        return f"{symbol}.JK"
     
     def get_statistics(self) -> Dict:
         """Get bot statistics"""

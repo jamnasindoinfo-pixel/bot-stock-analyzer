@@ -1,12 +1,12 @@
 {
   "current": {
-    "symbol": "XAUUSDm",
+    "symbol": "BBCA",
     "timeframe": "M5",
     "candles": 100,
     "account": "EXNESS",
     "trade_mode": "RAPID_FIRE",
     "auto_trade": true,
-    "lot": 0.01,
+    "lot": 1.0,
     "slippage": 20,
     "auto_close_profit": true,
     "auto_close_target": 0.4,
@@ -18,7 +18,7 @@
     "stpp_trailing": true,
     "step_lock_init": 0.3,
     "step_step": 0.1,
-    "trade_always_on": true,
+    "trade_always_on": false,
     "entry_decimals": 1,
     "signal_threshold": "LOW",
     "enable_scalping": true,
@@ -31,24 +31,65 @@
     "max_total_positions": 10,
     "enable_multi_symbol": true,
     "enable_multi_timeframe": true,
-    "symbols_to_trade": ["XAUUSDm", "EURUSDm", "GBPUSDm"],
-    "timeframes_to_check": ["M1", "M5", "M15"],
+    "symbols_to_trade": [
+      "BBCA",
+      "BBRI",
+      "TLKM"
+    ],
+    "timeframes_to_check": [
+      "M1",
+      "M5",
+      "M15"
+    ],
     "rapid_fire_mode": true,
     "grid_trading": false,
     "grid_distance": 5.0,
     "max_grid_levels": 3,
     "dynamic_lot_sizing": true,
     "risk_percent_per_trade": 1.0,
+    "instrument_type": "stock",
+    "stock_sl_pct": 0.02,
+    "stock_tp_pct": 0.05,
+    "data_source": "yfinance",
+    "market_timezone": "Asia/Jakarta",
+    "market_sessions": [
+      [
+        "09:00",
+        "12:00"
+      ],
+      [
+        "13:30",
+        "15:15"
+      ]
+    ],
+    "symbol_aliases": {
+      "BBCA": "BBCA.JK",
+      "BBRI": "BBRI.JK",
+      "TLKM": "TLKM.JK"
+    },
+    "strategy_profile": "scalping",
+    "stock_strategy": {
+      "enable": true,
+      "ema_fast": 5,
+      "ema_slow": 13,
+      "lookback_breakout": 10,
+      "volume_multiplier": 1.0,
+      "atr_period": 7,
+      "atr_multiplier": 1.1,
+      "rsi_period": 7,
+      "rsi_max_buy": 70,
+      "rsi_min_sell": 30
+    },
     "starting_balance": 0
   },
   "options": {
     "symbols": [
-      "XAUUSDm",
-      "EURUSDm",
-      "GBPUSDm",
-      "USDJPYm",
-      "AUDUSDm",
-      "BTCUSDm"
+      "BBCA",
+      "BBRI",
+      "TLKM",
+      "BMRI",
+      "BBNI",
+      "UNVR"
     ],
     "timeframes": [
       "M1",
@@ -70,5 +111,215 @@
       "DEMO",
       "EXNESS"
     ]
+  },
+  "strategy_profiles": {
+    "long_term": {
+      "label": "Jangka Panjang",
+      "description": "Fokus pada tren multi-minggu dengan konfirmasi kuat dan toleransi volatilitas lebih besar.",
+      "min_threshold": 0.2,
+      "params": {
+        "enable": true,
+        "ema_fast": 50,
+        "ema_slow": 200,
+        "lookback_breakout": 60,
+        "volume_multiplier": 1.2,
+        "atr_period": 21,
+        "atr_multiplier": 2.0,
+        "rsi_period": 14,
+        "rsi_max_buy": 60,
+        "rsi_min_sell": 40
+      },
+      "weights": {
+        "technical": 0.25,
+        "patterns": 0.1,
+        "breakout": 0.15,
+        "support_resistance": 0.25,
+        "scalping": 0.05,
+        "stock_strategy": 0.25,
+        "news": 0.15
+      }
+    },
+    "short_term": {
+      "label": "Jangka Pendek",
+      "description": "Mengincar pergerakan beberapa hari dengan MA lebih pendek dan breakout cepat.",
+      "min_threshold": 0.1,
+      "params": {
+        "enable": true,
+        "ema_fast": 12,
+        "ema_slow": 34,
+        "lookback_breakout": 20,
+        "volume_multiplier": 1.3,
+        "atr_period": 14,
+        "atr_multiplier": 1.3,
+        "rsi_period": 14,
+        "rsi_max_buy": 65,
+        "rsi_min_sell": 35
+      },
+      "weights": {
+        "technical": 0.3,
+        "patterns": 0.15,
+        "breakout": 0.2,
+        "support_resistance": 0.1,
+        "scalping": 0.15,
+        "stock_strategy": 0.2,
+        "news": 0.1
+      }
+    },
+    "aggressive": {
+      "label": "Agresif",
+      "description": "Breakout cepat dengan toleransi risiko tinggi dan volume sebagai pendorong utama.",
+      "min_threshold": 0.08,
+      "params": {
+        "enable": true,
+        "ema_fast": 20,
+        "ema_slow": 50,
+        "lookback_breakout": 20,
+        "volume_multiplier": 1.5,
+        "atr_period": 14,
+        "atr_multiplier": 1.5,
+        "rsi_period": 14,
+        "rsi_max_buy": 65,
+        "rsi_min_sell": 35
+      },
+      "weights": {
+        "technical": 0.25,
+        "patterns": 0.2,
+        "breakout": 0.25,
+        "support_resistance": 0.1,
+        "scalping": 0.15,
+        "stock_strategy": 0.25,
+        "news": 0.1
+      }
+    },
+    "conservative": {
+      "label": "Konservatif",
+      "description": "Menjaga modal dengan fokus pada konfirmasi tren dan support-resistance kuat.",
+      "min_threshold": 0.25,
+      "params": {
+        "enable": true,
+        "ema_fast": 30,
+        "ema_slow": 90,
+        "lookback_breakout": 45,
+        "volume_multiplier": 1.6,
+        "atr_period": 21,
+        "atr_multiplier": 2.2,
+        "rsi_period": 14,
+        "rsi_max_buy": 58,
+        "rsi_min_sell": 42
+      },
+      "weights": {
+        "technical": 0.2,
+        "patterns": 0.1,
+        "breakout": 0.1,
+        "support_resistance": 0.3,
+        "scalping": 0.05,
+        "stock_strategy": 0.25,
+        "news": 0.2
+      }
+    },
+    "momentum": {
+      "label": "Momentum",
+      "description": "Mengikuti saham yang sedang trending kuat dengan konfirmasi breakout dan volume.",
+      "min_threshold": 0.12,
+      "params": {
+        "enable": true,
+        "ema_fast": 15,
+        "ema_slow": 45,
+        "lookback_breakout": 25,
+        "volume_multiplier": 1.8,
+        "atr_period": 14,
+        "atr_multiplier": 1.4,
+        "rsi_period": 14,
+        "rsi_max_buy": 68,
+        "rsi_min_sell": 32
+      },
+      "weights": {
+        "technical": 0.3,
+        "patterns": 0.2,
+        "breakout": 0.25,
+        "support_resistance": 0.1,
+        "scalping": 0.1,
+        "stock_strategy": 0.25,
+        "news": 0.15
+      }
+    },
+    "scalping": {
+      "label": "Scalping",
+      "description": "Perdagangan sangat cepat berfokus pada pergerakan intraday dengan sinyal volume dan momentum pendek.",
+      "min_threshold": 0.05,
+      "params": {
+        "enable": true,
+        "ema_fast": 5,
+        "ema_slow": 13,
+        "lookback_breakout": 10,
+        "volume_multiplier": 1.0,
+        "atr_period": 7,
+        "atr_multiplier": 1.1,
+        "rsi_period": 7,
+        "rsi_max_buy": 70,
+        "rsi_min_sell": 30
+      },
+      "weights": {
+        "technical": 0.25,
+        "patterns": 0.1,
+        "breakout": 0.2,
+        "support_resistance": 0.05,
+        "scalping": 0.25,
+        "stock_strategy": 0.2,
+        "news": 0.1
+      }
+    },
+    "dividend": {
+      "label": "Dividen / Value",
+      "description": "Fokus pada saham defensif dengan volatilitas rendah dan level support kuat.",
+      "min_threshold": 0.22,
+      "params": {
+        "enable": true,
+        "ema_fast": 30,
+        "ema_slow": 100,
+        "lookback_breakout": 60,
+        "volume_multiplier": 1.1,
+        "atr_period": 21,
+        "atr_multiplier": 2.3,
+        "rsi_period": 14,
+        "rsi_max_buy": 55,
+        "rsi_min_sell": 45
+      },
+      "weights": {
+        "technical": 0.2,
+        "patterns": 0.1,
+        "breakout": 0.1,
+        "support_resistance": 0.35,
+        "scalping": 0.05,
+        "stock_strategy": 0.2,
+        "news": 0.25
+      }
+    },
+    "event_driven": {
+      "label": "Event Driven",
+      "description": "Mengandalkan katalis berita dan peristiwa khusus sebagai pemicu utama.",
+      "min_threshold": 0.1,
+      "params": {
+        "enable": true,
+        "ema_fast": 12,
+        "ema_slow": 30,
+        "lookback_breakout": 20,
+        "volume_multiplier": 1.4,
+        "atr_period": 14,
+        "atr_multiplier": 1.4,
+        "rsi_period": 14,
+        "rsi_max_buy": 65,
+        "rsi_min_sell": 35
+      },
+      "weights": {
+        "technical": 0.2,
+        "patterns": 0.1,
+        "breakout": 0.2,
+        "support_resistance": 0.1,
+        "scalping": 0.1,
+        "stock_strategy": 0.2,
+        "news": 0.3
+      }
+    }
   }
 }
