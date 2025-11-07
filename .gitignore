@@ -55,4 +55,4 @@ dist/
 *.cache
 
 # Git worktrees
-.worktrees/
+.worktrees/nul
