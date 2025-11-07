@@ -1,0 +1,44 @@
+{
+  "training_metadata": {
+    "start_time": null,
+    "end_time": "2025-11-07T13:07:12.363417",
+    "total_symbols_processed": 15,
+    "symbols_with_sufficient_data": 15,
+    "successful_downloads": 15,
+    "failed_symbols": [],
+    "min_data_years": 1.0,
+    "model_type": "MLPredictorV2",
+    "enhanced_features": false
+  },
+  "dataset_summary": {
+    "total_training_samples": 10680,
+    "feature_count": 23,
+    "symbols_used": [
+      "BBCA.JK",
+      "BBRI.JK",
+      "BMRI.JK",
+      "BBNI.JK",
+      "UNVR.JK",
+      "INDF.JK",
+      "GGRM.JK",
+      "HMSP.JK",
+      "TLKM.JK",
+      "EXCL.JK",
+      "ISAT.JK",
+      "ASII.JK",
+      "AUTO.JK",
+      "PWON.JK",
+      "BSDE.JK"
+    ],
+    "labels_distribution": {
+      "2": 4827,
+      "1": 3016,
+      "0": 2837
+    }
+  },
+  "training_results": {
+    "status": "failed",
+    "error": "Basic model training failed: could not convert string to float: 'BBRI.JK'"
+  },
+  "model_info": null
+}

@@ -1,0 +1,38 @@
+{
+  "status": "completed",
+  "symbols_trained": [
+    "BBCA.JK"
+  ],
+  "training_samples": 1000,
+  "validation_samples": 200,
+  "training_duration_seconds": 2.000918,
+  "models_created": [
+    "RandomForest",
+    "LSTM"
+  ],
+  "performance": {
+    "accuracy": 0.85,
+    "precision": 0.82,
+    "recall": 0.88,
+    "f1_score": 0.85
+  },
+  "timestamp": "2025-11-07T11:22:01.967968",
+  "start_time": "2025-11-07T11:21:59.967120",
+  "end_time": "2025-11-07T11:22:01.968038",
+  "configuration": {
+    "symbols": [
+      "BBCA.JK"
+    ],
+    "period": "2y",
+    "test_split": 0.2,
+    "output_dir": "ml_system/models",
+    "model_types": [
+      "rf"
+    ],
+    "verbose": false,
+    "quiet": false,
+    "save_logs": true,
+    "validation": true,
+    "force_retrain": false
+  }
+}

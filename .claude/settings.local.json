@@ -6,7 +6,8 @@
       "Bash(python:*)",
       "Bash(git commit:*)",
       "Bash(git tag:*)",
-      "Skill(superpowers:using-git-worktrees)"
+      "Skill(superpowers:using-git-worktrees)",
+      "Skill(superpowers:brainstorming)"
     ],
     "deny": [],
     "ask": []

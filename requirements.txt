@@ -5,7 +5,13 @@ newsapi-python>=0.2.7
 tradingeconomics>=0.3.4
 ta-lib>=0.4.26
 rich>=13.5.2
+
+# Machine Learning Dependencies
 scikit-learn>=1.3.0
+xgboost>=2.0.0
+# tensorflow>=2.15.0  # Commented - Python 3.14 compatibility issue
+
+# Technical Analysis
 ta>=0.10.2
 requests
 python-dateutil>=2.8.2
