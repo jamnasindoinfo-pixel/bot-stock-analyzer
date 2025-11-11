@@ -1,0 +1,916 @@
+{
+  "top_5": [
+    {
+      "symbol": "TOWR.JK",
+      "sector": "Infrastructure",
+      "current_price": 570.0,
+      "price_change": 5.555555555555558,
+      "technical": {
+        "score": 0.6666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 1,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 60.869565217391305,
+          "price": 570.0,
+          "volume_ratio": 3.5577497557046818,
+          "bb_position": 1.14436452080161,
+          "sma_5": 545.0,
+          "sma_20": 542.75
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6333333333333333,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.3189234084619855,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 520.0,
+        "resistance": 575.0
+      }
+    },
+    {
+      "symbol": "BSDE.JK",
+      "sector": "Property",
+      "current_price": 975.0,
+      "price_change": 0.0,
+      "technical": {
+        "score": 0.6666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 0,
+          "bollinger": 0,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 47.05882352941176,
+          "price": 975.0,
+          "volume_ratio": 0.90461330756184,
+          "bb_position": 0.6804306936569224,
+          "sma_5": 963.0,
+          "sma_20": 962.75
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6333333333333333,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.37248126766353684,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 915.0,
+        "resistance": 1050.0
+      }
+    },
+    {
+      "symbol": "TINS.JK",
+      "sector": "Mining",
+      "current_price": 3120.0,
+      "price_change": 6.849315068493156,
+      "technical": {
+        "score": 0.3333333333333333,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": -1,
+          "volume": 1,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 56.31578947368421,
+          "price": 3120.0,
+          "volume_ratio": 2.397926008452455,
+          "bb_position": 0.9979860174770846,
+          "sma_5": 2842.0,
+          "sma_20": 2737.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.6
+      },
+      "comprehensive": {
+        "score": 0.6266666666666667,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.9649427668578449,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 2340.0,
+        "resistance": 3120.0
+      }
+    },
+    {
+      "symbol": "KLBF.JK",
+      "sector": "Consumer",
+      "current_price": 1270.0,
+      "price_change": 0.39525691699604515,
+      "technical": {
+        "score": 0.5,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": -1,
+          "bollinger": 0,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 55.208333333333336,
+          "price": 1270.0,
+          "volume_ratio": 0.619356482415261,
+          "bb_position": 0.6311043065365216,
+          "sma_5": 1266.0,
+          "sma_20": 1231.5
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.1
+      },
+      "comprehensive": {
+        "score": 0.61,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.5911928913190282,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 1055.0,
+        "resistance": 1345.0
+      }
+    },
+    {
+      "symbol": "ISAT.JK",
+      "sector": "Technology",
+      "current_price": 2070.0,
+      "price_change": -3.7209302325581395,
+      "technical": {
+        "score": 0.5,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 0,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 60.869565217391305,
+          "price": 2070.0,
+          "volume_ratio": 1.14579187149639,
+          "bb_position": 0.9178658364929045,
+          "sma_5": 2013.0,
+          "sma_20": 1914.5
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.6859663416219322,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 1750.0,
+        "resistance": 2180.0
+      }
+    }
+  ],
+  "all_results": [
+    {
+      "symbol": "TOWR.JK",
+      "sector": "Infrastructure",
+      "current_price": 570.0,
+      "price_change": 5.555555555555558,
+      "technical": {
+        "score": 0.6666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 1,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 60.869565217391305,
+          "price": 570.0,
+          "volume_ratio": 3.5577497557046818,
+          "bb_position": 1.14436452080161,
+          "sma_5": 545.0,
+          "sma_20": 542.75
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6333333333333333,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.3189234084619855,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 520.0,
+        "resistance": 575.0
+      }
+    },
+    {
+      "symbol": "BSDE.JK",
+      "sector": "Property",
+      "current_price": 975.0,
+      "price_change": 0.0,
+      "technical": {
+        "score": 0.6666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 0,
+          "bollinger": 0,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 47.05882352941176,
+          "price": 975.0,
+          "volume_ratio": 0.90461330756184,
+          "bb_position": 0.6804306936569224,
+          "sma_5": 963.0,
+          "sma_20": 962.75
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6333333333333333,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.37248126766353684,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 915.0,
+        "resistance": 1050.0
+      }
+    },
+    {
+      "symbol": "TINS.JK",
+      "sector": "Mining",
+      "current_price": 3120.0,
+      "price_change": 6.849315068493156,
+      "technical": {
+        "score": 0.3333333333333333,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": -1,
+          "volume": 1,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 56.31578947368421,
+          "price": 3120.0,
+          "volume_ratio": 2.397926008452455,
+          "bb_position": 0.9979860174770846,
+          "sma_5": 2842.0,
+          "sma_20": 2737.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.6
+      },
+      "comprehensive": {
+        "score": 0.6266666666666667,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.9649427668578449,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 2340.0,
+        "resistance": 3120.0
+      }
+    },
+    {
+      "symbol": "KLBF.JK",
+      "sector": "Consumer",
+      "current_price": 1270.0,
+      "price_change": 0.39525691699604515,
+      "technical": {
+        "score": 0.5,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": -1,
+          "bollinger": 0,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 55.208333333333336,
+          "price": 1270.0,
+          "volume_ratio": 0.619356482415261,
+          "bb_position": 0.6311043065365216,
+          "sma_5": 1266.0,
+          "sma_20": 1231.5
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.1
+      },
+      "comprehensive": {
+        "score": 0.61,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.5911928913190282,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 1055.0,
+        "resistance": 1345.0
+      }
+    },
+    {
+      "symbol": "ISAT.JK",
+      "sector": "Technology",
+      "current_price": 2070.0,
+      "price_change": -3.7209302325581395,
+      "technical": {
+        "score": 0.5,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 0,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 60.869565217391305,
+          "price": 2070.0,
+          "volume_ratio": 1.14579187149639,
+          "bb_position": 0.9178658364929045,
+          "sma_5": 2013.0,
+          "sma_20": 1914.5
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.6859663416219322,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 1750.0,
+        "resistance": 2180.0
+      }
+    },
+    {
+      "symbol": "POWR.JK",
+      "sector": "Energy",
+      "current_price": 705.0,
+      "price_change": -0.7042253521126751,
+      "technical": {
+        "score": 0.5,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 0,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 50.0,
+          "price": 705.0,
+          "volume_ratio": 0.9129019967820077,
+          "bb_position": 0.6369306393762919,
+          "sma_5": 703.0,
+          "sma_20": 702.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.6,
+        "recommendation": "BUY"
+      },
+      "risk": {
+        "volatility": 0.1215453417183528,
+        "level": "LOW"
+      },
+      "levels": {
+        "support": 685.0,
+        "resistance": 730.0
+      }
+    },
+    {
+      "symbol": "EXCL.JK",
+      "sector": "Technology",
+      "current_price": 2750.0,
+      "price_change": 0.36496350364962904,
+      "technical": {
+        "score": 0.5,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 1,
+          "bollinger": -1,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 64.36781609195403,
+          "price": 2750.0,
+          "volume_ratio": 1.3286669403296187,
+          "bb_position": 0.8635880179809817,
+          "sma_5": 2732.0,
+          "sma_20": 2575.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": -0.1
+      },
+      "comprehensive": {
+        "score": 0.59,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.501313065062453,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 2380.0,
+        "resistance": 2770.0
+      }
+    },
+    {
+      "symbol": "ANTM.JK",
+      "sector": "Mining",
+      "current_price": 2910.0,
+      "price_change": 0.34482758620688614,
+      "technical": {
+        "score": 0.16666666666666666,
+        "signals": {
+          "rsi": 2,
+          "ma_trend": -1,
+          "macd": -1,
+          "volume": 0,
+          "bollinger": 1,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 24.324324324324323,
+          "price": 2910.0,
+          "volume_ratio": 1.1856137784534448,
+          "bb_position": 0.13700261564130536,
+          "sma_5": 2936.0,
+          "sma_20": 3157.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.5
+      },
+      "comprehensive": {
+        "score": 0.5833333333333334,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.338270307070323,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 2870.0,
+        "resistance": 3540.0
+      }
+    },
+    {
+      "symbol": "PGAS.JK",
+      "sector": "Energy",
+      "current_price": 1730.0,
+      "price_change": -1.7045454545454586,
+      "technical": {
+        "score": 0.3333333333333333,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 0,
+          "macd": 1,
+          "volume": 0,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 52.38095238095237,
+          "price": 1730.0,
+          "volume_ratio": 0.869966441788556,
+          "bb_position": 0.6230772056603942,
+          "sma_5": 1732.0,
+          "sma_20": 1707.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.1
+      },
+      "comprehensive": {
+        "score": 0.5766666666666667,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.352148653621279,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 1605.0,
+        "resistance": 1785.0
+      }
+    },
+    {
+      "symbol": "GOTO.JK",
+      "sector": "Technology",
+      "current_price": 67.0,
+      "price_change": 9.836065573770503,
+      "technical": {
+        "score": 0.16666666666666666,
+        "signals": {
+          "rsi": -2,
+          "ma_trend": 1,
+          "macd": 1,
+          "volume": 1,
+          "bollinger": -1,
+          "price_momentum": 1
+        },
+        "details": {
+          "rsi": 72.0,
+          "price": 67.0,
+          "volume_ratio": 3.710717655156457,
+          "bb_position": 1.197734003910891,
+          "sma_5": 61.6,
+          "sma_20": 57.4
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.4
+      },
+      "comprehensive": {
+        "score": 0.5733333333333334,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.5898660200786394,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 54.0,
+        "resistance": 69.0
+      }
+    },
+    {
+      "symbol": "SMGR.JK",
+      "sector": "Mining",
+      "current_price": 2760.0,
+      "price_change": -4.1666666666666625,
+      "technical": {
+        "score": 0.3333333333333333,
+        "signals": {
+          "rsi": 0,
+          "ma_trend": 0,
+          "macd": 1,
+          "volume": 1,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 66.66666666666666,
+          "price": 2760.0,
+          "volume_ratio": 2.0162610480173977,
+          "bb_position": 0.6590256161738255,
+          "sma_5": 2820.0,
+          "sma_20": 2667.5
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.5666666666666667,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.4250586212981218,
+        "level": "HIGH"
+      },
+      "levels": {
+        "support": 2380.0,
+        "resistance": 2920.0
+      }
+    },
+    {
+      "symbol": "BBCA.JK",
+      "sector": "Banking",
+      "current_price": 8575.0,
+      "price_change": -1.1527377521613813,
+      "technical": {
+        "score": 0.16666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 0,
+          "macd": 1,
+          "volume": -1,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 53.22580645161291,
+          "price": 8575.0,
+          "volume_ratio": 0.4120326591953214,
+          "bb_position": 0.6728024900848826,
+          "sma_5": 8630.0,
+          "sma_20": 8226.25
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.3
+      },
+      "comprehensive": {
+        "score": 0.5633333333333334,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.39659217658622153,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 7225.0,
+        "resistance": 8750.0
+      }
+    },
+    {
+      "symbol": "BBRI.JK",
+      "sector": "Banking",
+      "current_price": 3930.0,
+      "price_change": -1.2562814070351758,
+      "technical": {
+        "score": 0.16666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 0,
+          "macd": 1,
+          "volume": -1,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 64.40677966101694,
+          "price": 3930.0,
+          "volume_ratio": 0.5816592878691127,
+          "bb_position": 0.6622110028087563,
+          "sma_5": 3972.0,
+          "sma_20": 3814.0
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.2
+      },
+      "comprehensive": {
+        "score": 0.5533333333333333,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.2973197800134621,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 3450.0,
+        "resistance": 4050.0
+      }
+    },
+    {
+      "symbol": "ASII.JK",
+      "sector": "Infrastructure",
+      "current_price": 6425.0,
+      "price_change": 0.0,
+      "technical": {
+        "score": 0.16666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 1,
+          "macd": -1,
+          "volume": 0,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 61.64383561643836,
+          "price": 6425.0,
+          "volume_ratio": 0.8569396009026082,
+          "bb_position": 0.7032418115616695,
+          "sma_5": 6345.0,
+          "sma_20": 6193.75
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.2
+      },
+      "comprehensive": {
+        "score": 0.5533333333333333,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.39040152009696816,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 5575.0,
+        "resistance": 6725.0
+      }
+    },
+    {
+      "symbol": "ADHI.JK",
+      "sector": "Infrastructure",
+      "current_price": 266.0,
+      "price_change": -0.7462686567164201,
+      "technical": {
+        "score": 0.16666666666666666,
+        "signals": {
+          "rsi": 1,
+          "ma_trend": 0,
+          "macd": 1,
+          "volume": -1,
+          "bollinger": 0,
+          "price_momentum": 0
+        },
+        "details": {
+          "rsi": 50.0,
+          "price": 266.0,
+          "volume_ratio": 0.7897119798744768,
+          "bb_position": 0.5562043638013499,
+          "sma_5": 267.2,
+          "sma_20": 264.6
+        }
+      },
+      "ml": {
+        "prediction": 0.5,
+        "confidence": 0.5,
+        "features": {}
+      },
+      "news": {
+        "sentiment": 0.0
+      },
+      "comprehensive": {
+        "score": 0.5333333333333333,
+        "recommendation": "HOLD"
+      },
+      "risk": {
+        "volatility": 0.3486487828419043,
+        "level": "MEDIUM"
+      },
+      "levels": {
+        "support": 246.0,
+        "resistance": 282.0
+      }
+    }
+  ],
+  "sector_performance": {
+    "Banking": 0.486388888888889,
+    "Technology": 0.5439999999999999,
+    "Consumer": 0.48888888888888893,
+    "Infrastructure": 0.5194444444444445,
+    "Mining": 0.5305555555555556,
+    "Property": 0.5416666666666666,
+    "Energy": 0.5353333333333333
+  },
+  "analysis_time": "2025-11-11T07:57:50.733477"
+}

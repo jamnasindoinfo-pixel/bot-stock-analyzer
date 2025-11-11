@@ -1,0 +1,192 @@
+[
+  {
+    "symbol": "ASII.JK",
+    "current_price": 6425.0,
+    "price_change": 0.0,
+    "rsi": 61.64383561643836,
+    "macd": 66.25706533458651,
+    "volume_ratio": 0.8569396009026082,
+    "bb_position": 0.7032418115616634,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": 1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": 1,
+      "bb_signal": -1
+    },
+    "total_score": 1,
+    "recommendation": "HOLD"
+  },
+  {
+    "symbol": "BBCA.JK",
+    "current_price": 8575.0,
+    "price_change": -1.1527377521613833,
+    "rsi": 53.22580645161291,
+    "macd": 148.76423691536365,
+    "volume_ratio": 0.4120326591953214,
+    "bb_position": 0.6728024900848826,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": 1,
+      "bb_signal": -1
+    },
+    "total_score": -1,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "BBRI.JK",
+    "current_price": 3930.0,
+    "price_change": -1.256281407035176,
+    "rsi": 64.40677966101694,
+    "macd": 53.53085523384152,
+    "volume_ratio": 0.5816592878691127,
+    "bb_position": 0.6622110028087568,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": 1,
+      "bb_signal": -1
+    },
+    "total_score": -1,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "TLKM.JK",
+    "current_price": 3440.0,
+    "price_change": -0.8645533141210375,
+    "rsi": 57.01754385964913,
+    "macd": 66.75764723174962,
+    "volume_ratio": 0.7527245588405987,
+    "bb_position": 0.7243808820391707,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": 1,
+      "bb_signal": -1
+    },
+    "total_score": -1,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "KLBF.JK",
+    "current_price": 1270.0,
+    "price_change": 0.3952569169960474,
+    "rsi": 55.208333333333336,
+    "macd": 16.695492807884193,
+    "volume_ratio": 0.619356482415261,
+    "bb_position": 0.6311043065365214,
+    "signals": {
+      "price_momentum": 1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": -1,
+      "bb_signal": -1
+    },
+    "total_score": -1,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "ICBP.JK",
+    "current_price": 8650.0,
+    "price_change": 0.5813953488372093,
+    "rsi": 29.508196721311478,
+    "macd": -65.29848979562121,
+    "volume_ratio": 0.6235777840198956,
+    "bb_position": 0.35731592493526804,
+    "signals": {
+      "price_momentum": 1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 0,
+      "macd_signal": -1,
+      "bb_signal": -1
+    },
+    "total_score": -2,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "BBNI.JK",
+    "current_price": 4420.0,
+    "price_change": -1.7777777777777777,
+    "rsi": 75.34246575342465,
+    "macd": 78.46505738307224,
+    "volume_ratio": 0.58434059430751,
+    "bb_position": 0.6815767403170527,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": -1,
+      "macd_signal": 1,
+      "bb_signal": -1
+    },
+    "total_score": -3,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "BMRI.JK",
+    "current_price": 4730.0,
+    "price_change": -0.42105263157894735,
+    "rsi": 71.5909090909091,
+    "macd": 87.54009693002172,
+    "volume_ratio": 0.448893848033906,
+    "bb_position": 0.7195208622275707,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": -1,
+      "macd_signal": 1,
+      "bb_signal": -1
+    },
+    "total_score": -3,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "INDF.JK",
+    "current_price": 7100.0,
+    "price_change": -0.3508771929824561,
+    "rsi": 43.13725490196078,
+    "macd": -24.469549422418822,
+    "volume_ratio": 0.5896248374893528,
+    "bb_position": 0.32372448459191583,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": -1,
+      "bb_signal": -1
+    },
+    "total_score": -3,
+    "recommendation": "SELL"
+  },
+  {
+    "symbol": "UNVR.JK",
+    "current_price": 2530.0,
+    "price_change": 0.0,
+    "rsi": 68.75,
+    "macd": 90.44140022923966,
+    "volume_ratio": 0.6013233606226288,
+    "bb_position": 0.634073165192931,
+    "signals": {
+      "price_momentum": -1,
+      "sma_trend": -1,
+      "volume_strength": 0,
+      "rsi_signal": 1,
+      "macd_signal": -1,
+      "bb_signal": -1
+    },
+    "total_score": -3,
+    "recommendation": "SELL"
+  }
+]

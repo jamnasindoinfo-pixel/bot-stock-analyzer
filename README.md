@@ -1,181 +1,181 @@
-## 🤖 Bot Trading MT5 Agresif Cerdas (Python)
+# 📊 Bot Analisis Saham Indonesia
 
-Bot trading ini dirancang khusus untuk **MetaTrader 5 (MT5)**, mengadopsi pendekatan **Rapid Fire** dan **Agresif** dengan berbagai strategi multi-posisi. Skrip ini menampilkan manajemen posisi dinamis, kontrol risiko canggih, dan potensi integrasi dengan **Gemini API** untuk analisis yang ditingkatkan oleh AI.
+**Sistem analisis saham Indonesia** yang menggabungkan Technical Analysis, AI (Gemini), dan Machine Learning untuk memberikan rekomendasi trading.
 
------
+> ⚠️ **PENTING**: Ini adalah **sistem analisis**, BUKAN trading bot otomatis. Program memberikan rekomendasi untuk keputusan trading Anda.
 
-## 🚀 Fitur & Kemampuan Utama
+## 🎯 Fungsi Utama
 
-Bot ini beroperasi dengan fokus pada kecepatan dan volume, sangat cocok untuk pasar yang volatil dan strategi *scalping*.
+1. **Analisis Teknikal**
+   - RSI, MACD, Bollinger Bands
+   - Moving Averages
+   - Volume analysis
 
-### 💰 Trading & Eksekusi
+2. **AI Analysis (Gemini)**
+   - Analisis qualitative dengan Google AI
+   - Interpretasi market sentiment
 
-  * **Mode Rapid Fire Trading:** Mode frekuensi tinggi yang dirancang untuk memeriksa banyak simbol dan *timeframe* setiap 10 detik, bertujuan untuk mengisi batas `Max Total Positions` dengan cepat.
-  * **Manajemen Multi-Posisi:** Memungkinkan trading simultan di beberapa pasangan mata uang dan/atau *timeframe*.
-      * `max_total_positions`: Batas global untuk *open trades* (standar: 10).
-      * `max_positions_per_symbol`: Batas untuk *trades* pada aset tunggal (standar: 3).
-  * **Ukuran Lot Dinamis (Berdasarkan Risiko):** Menghitung ukuran lot untuk setiap *trade* berdasarkan persentase tetap dari saldo akun (`risk_percent_per_trade`), memastikan manajemen risiko yang konsisten.
-      * Bot mengukur risiko dengan mengestimasi jarak SL dalam USD.
-  * **Stop Loss (SL) & Take Profit (TP) Berbasis ATR:** Menghitung level SL/TP secara dinamis berdasarkan **Average True Range (ATR)** pasar, menyesuaikan dengan volatilitas saat ini.
-      * Menggunakan pengali (1.5x ATR untuk SL, 2.0x ATR untuk TP) untuk rasio risiko/imbalan yang terhitung.
-  * **Manajemen Posisi Lanjutan (TradeManager):**
-      * **Auto-Close Profit:** Menutup posisi segera setelah mencapai target profit tetap dalam USD (`auto_close_target`).
-      * **Breakeven (BEP):** Secara otomatis memindahkan Stop Loss ke harga *entry* (ditambah *spread*) setelah ambang profit minimum (`bep_min_profit`) tercapai.
-      * **Trailing Stop (STPP Trailing):** Terus menyesuaikan SL dalam langkah-langkah profit tetap (`step_step`), mengunci keuntungan yang telah direalisasi.
-  * **Sinyal Cepat Scalping:** Memanfaatkan indikator momentum jangka pendek dan pergerakan candlestick berurutan untuk sinyal trading yang sangat cepat.
+3. **Machine Learning**
+   - Ensemble models (Random Forest, XGBoost, LSTM)
+   - Prediksi berdasarkan 43+ fitur teknikal
 
-### 🔍 Analisis Pasar & Strategi (Mode Agresif)
+4. **Saham Indonesia Focus**
+   - Data dari Yahoo Finance (yfinance)
+   - Top 10 saham: BBCA.JK, BBRI.JK, BBNI.JK, dll
 
-Bot menggunakan strategi *multi-strategy* sensitivitas tinggi, menggabungkan sinyal dari berbagai sumber untuk menghasilkan keputusan trading.
+## 🚀 Cara Menggunakan
 
-| Komponen Analisis | Bobot | Keterangan |
-| :--- | :--- | :--- |
-| **Indikator Teknikal** | 30% | *Fast MA Cross*, Posisi Harga, RSI sensitif (40/60), MACD, dan Stochastic cepat (30/70). |
-| **Pola Candlestick** | 25% | Mendeteksi Pola Kuat seperti *Engulfing*, *Morning/Evening Star*, dan *Three Soldiers/Crows*. |
-| **Deteksi Breakout** | 20% | Memantau *breakout* tinggi/rendah baru-baru ini dan pergerakan volatilitas tinggi. |
-| **Support/Resistance** | 15% | Memberi sinyal ketika harga mendekati level S/R utama (berbasis Pivot). |
-| **Sinyal Scalping** | 10% | Momentum sangat jangka pendek, lonjakan volume, dan pergerakan *candle* berurutan. |
-
-### 🧠 Integrasi AI (Gemini)
-
-  * **Inisialisasi Gemini:** Skrip mencoba menginisialisasi klien Gemini dan melakukan tes koneksi saat startup.
-  * **Analisis Cepat AI (Menu 1):** Opsi *Analyze Now* (Menu 1) dapat menggunakan Gemini AI untuk memberikan opini cepat, satu kalimat, tentang situasi pasar berdasarkan ringkasan teknikal.
-
------
-
-## 📈 Kelebihan & Kekurangan (Pros & Cons)
-
-| Kategori | Kelebihan (Pros) | Kekurangan (Cons) |
-| :--- | :--- | :--- |
-| **Strategi** | ✅ Fokus pada *high-frequency trading* & *scalping*. | ❌ Peka terhadap *noise* pasar karena ambang sinyal rendah dan sensitivitas tinggi. |
-| **Manajemen** | ✅ Ukuran lot dinamis berbasis risiko untuk konsistensi risiko. | ❌ Parameter ATR, SL/TP harus disesuaikan secara manual per instrumen jika menggunakan aset yang sangat berbeda (misal BTCUSD). |
-| **Fitur** | ✅ Manajemen posisi canggih (BEP, Trailing, Auto-Close). | ❌ Fitur *backtest* hanya menyediakan data mentah (ke CSV), tidak ada simulasi *trade*. |
-| **Eksekusi** | ✅ Mendukung *multi-symbol* dan *multi-timeframe* untuk peluang lebih banyak. | ❌ Ketergantungan pada koneksi MT5 yang stabil untuk *real-time execution*. |
-| **AI** | ✅ Potensi untuk analisis dan validasi sinyal tambahan dari AI (Gemini). | ❌ Analisis AI memerlukan koneksi internet stabil dan `GEMINI_API_KEY` yang valid. |
-
------
-
-## 🛠️ Instalasi & Persiapan
-
-### 1\. File Requirements
-
-Buat file bernama `requirements.txt` dengan konten berikut:
-
-```requirements.txt
-# Core Dependencies
-metatrader5
-python-dotenv>=1.0.0
-newsapi-python>=0.2.7
-tradingeconomics>=0.3.4
-ta-lib>=0.4.26
-rich>=13.5.2
-scikit-learn>=1.3.0
-ta>=0.10.2
-requests
-python-dateutil>=2.8.2
-numpy==1.26.4
-pandas==2.2.2
-google-genai
-python-dotenv==0.21.1
-google-generativeai==0.5.4
-yfinance==0.2.38
-matplotlib==3.8.4
-```
-
-### 2\. Python Setup
-
-Jalankan perintah berikut untuk menginstal semua *dependency*:
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3\. Konfigurasi Lingkungan (`.env`)
-
-Buat file bernama **`.env`** di direktori *root* dan isi detail *login* serta *API key* Anda.
-
-| Variabel | Keterangan | Sumber |
-| :--- | :--- | :--- |
-| `MT5_LOGIN` | Nomor *login* akun MT5 Anda. | Broker Forex Anda |
-| `MT5_PASSWORD` | Kata sandi akun MT5 Anda. | Broker Forex Anda |
-| `MT5_SERVER` | Nama *server* MT5 broker Anda (misalnya, `Exness-MT5Trial6`). | Broker Forex Anda |
-| `GEMINI_API_KEY` | *API key* Anda untuk Gemini AI. | Google AI Studio |
-| `NEWS_API_KEY` | (*Opsional*) *API key* untuk mengambil berita keuangan. | NewsAPI.org |
-| `TRADING_ECONOMICS_KEY` | (*Opsional*) Kunci untuk data kalender ekonomi (standar: `guest:guest`). | Trading Economics |
-
-**Contoh `.env`:**
-
-```dotenv
-MT5_LOGIN=123
-MT5_PASSWORD=123
-MT5_SERVER=server
-GEMINI_API_KEY=APIKEY
-NEWS_API_KEY=APIKEY
-TRADING_ECONOMICS_KEY=guest:guest
-```
-
-### 4\. Konfigurasi Bot (`config.json`)
-
-File ini berisi pengaturan logika inti. File yang disediakan sudah dikonfigurasi untuk **Rapid Fire Mode** pada tiga simbol (`XAUUSDm`, `EURUSDm`, `GBPUSDm`) dengan **Dynamic Lot Sizing** diaktifkan.
-
-**Pengaturan Kunci (di bagian `"current"`):**
-
-| Kunci | Nilai Standar | Keterangan |
-| :--- | :--- | :--- |
-| `"rapid_fire_mode"` | `true` | Mengaktifkan pemeriksaan cepat *multi-symbol*/*multi-timeframe*. |
-| `"dynamic_lot_sizing"` | `true` | Menghitung lot berdasarkan risiko per *trade*. |
-| `"risk_percent_per_trade"` | `1.0` | Persentase saldo yang dipertaruhkan per *trade* (digunakan dalam lot dinamis). |
-| `"max_total_positions"` | `10` | Jumlah maksimum *trade* yang dibuka secara bersamaan. |
-| `"max_daily_trades"` | `100` | Jumlah maksimum *trade* yang diizinkan dalam satu hari. |
-| `"auto_close_target"` | `0.4` | Profit dalam USD yang memicu *Auto-Close*. |
-
------
-
-## ▶️ Cara Penggunaan
-
-### 1\. Jalankan Skrip
-
-Mulai bot dari terminal Anda:
-
+### 1. Jalankan Program Utama
 ```bash
 python main.py
 ```
 
-### 2\. Koneksi & Menu
+Program akan:
+1. Mengecek koneksi Gemini AI
+2. Menampilkan daftar 10 saham Indonesia
+3. Meminta user memilih saham (1-10)
+4. Memberikan analisis komprehensif
 
-  * Skrip pertama-tama akan mencoba terhubung ke MT5 menggunakan detail di `.env` dan menginisialisasi klien Gemini.
-  * Anda akan melihat menu utama, menampilkan pengaturan saat ini dan ringkasan akun.
+### 2. Jalankan Analisis Otomatis
+```bash
+# Analisis semua 10 saham
+python analysis/auto_analysis.py
 
-### 3\. Memulai Trading Otomatis
+# Analisis 30+ saham
+python analysis/expanded_analysis.py
 
-1.  **Tinjau Pengaturan:** Gunakan opsi menu 2-31 untuk menyesuaikan simbol, *timeframe*, mode *trade*, dan batas posisi jika diperlukan.
+# Analisis gabungan (Technical + ML + News)
+python analysis/comprehensive_analysis.py
+```
 
-      * *Rekomendasi:* Gunakan **Menu 31** untuk mengatur preset **Rapid Fire** atau **Moderate** dengan cepat.
+### 3. Train/Ulang ML Model
+```bash
+python ml_system/training/improve_ml_accuracy.py
+```
 
-2.  **Mulai Trading:** Pilih opsi **`99`** dan tekan Enter.
+## 📊 Output yang Dihasilkan
 
-    ```
-    99) START TRADING
-    ```
+### Console Output:
+- Harga saham terkini
+- Technical indicators (RSI, MACD, dll)
+- Rekomendasi: BUY/HOLD/SELL
+- Risk level (LOW/MEDIUM/HIGH)
+- Support & resistance levels
 
-    Bot akan memulai siklus analisis dan eksekusi *trade* berkelanjutan.
+### JSON Logs (di `analysis_logs/`):
+- Detailed analysis per stock
+- ML prediction scores
+- Historical performance
 
-### 4\. Hentikan Bot
+## ⚙️ Setup
 
-  * Tekan **`Ctrl+C`** di jendela terminal untuk menghentikan bot dengan aman. Bot akan mencetak statistik akhir sebelum mematikan koneksi MT5.
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
------
+### 2. Setup API Keys
+Buat file `.env`:
+```bash
+GEMINI_API_KEY=your_gemini_key
+NEWS_API_KEY=your_news_key
+```
 
-## 📋 File-file Utama
+### 3. Run the Program
+```bash
+python main.py
+```
 
-| File | Keterangan |
-| :--- | :--- |
-| `main.py` | Titik masuk utama. Menangani *setup*, koneksi MT5, *loop* menu, dan memulai `TradingBot`. Mengandung inisialisasi Gemini. |
-| `bot_manager.py` | Kelas `TradingBot` inti. Mengelola siklus *trading* (termasuk *Rapid Fire*), menegakkan batas posisi, dan menjalankan sinyal. |
-| `trade_manager.py` | Menangani semua operasi *trade* MT5. Berisi logika untuk **SL/TP Berbasis ATR**, **Breakeven**, **Step Trailing**, dan **Auto-Close Profit**. |
-| `market_analyzer.py` | Kelas `MarketAnalyzer`. Menerapkan analisis *multi-strategy* agresif, menggabungkan sinyal teknikal, pola, *breakout*, dan *scalping*. |
-| `config.json` | Menyimpan konfigurasi pengguna, termasuk simbol yang dipilih, mode *trading*, parameter risiko, dan pengaturan manajemen. |
-| `requirements.txt` | Daftar semua paket Python yang diperlukan. |
-| `.env` | Menyimpan variabel lingkungan sensitif (*login* MT5 dan *API keys*).
+## 📈 Contoh Output
 
------
+```
+============================================================
+BOT STOCK MARKET - NO MT5 VERSION
+   Analisis Saham Indonesia dengan AI & Machine Learning
+============================================================
+
+[1] Mengecek koneksi Gemini AI...
+[SUCCESS] Gemini AI terhubung
+
+[2] Mendapatkan daftar saham...
+[INFO] 10 saham tersedia:
+   1. BBCA.JK: Rp 8,575
+   2. BBRI.JK: Rp 3,930
+   3. BBNI.JK: Rp 4,420
+   ... dan 7 saham lainnya
+
+[3] Pilih saham untuk analisis:
+   1. BBCA.JK
+   2. BBRI.JK
+   ...
+
+Masukkan nomor saham (1-10): 1
+
+[ANALYSIS] BBCA.JK - Bank Central Asia
+Current Price: Rp 8,575 (-1.15%)
+RSI: 53.2 (Neutral)
+Volume: 0.41x average
+Recommendation: HOLD
+Risk Level: MEDIUM
+
+Technical Signals:
+  RSI: Neutral
+  MACD: Bearish crossover
+  Volume: Below average
+  Position: Above SMA20
+
+ML Prediction: 0.55 (Confidence: 65%)
+Gemini Analysis: "Saham sedang konsolidasi..."
+
+Overall Recommendation: WAIT FOR BETTER ENTRY
+```
+
+## 📁 Struktur Proyek
+
+```
+Bot-Stock-Market/
+├── main.py                     # Program utama (interactive)
+├── analysis/                   # Script-script analisis
+├── ml_system/                  # Machine Learning system
+├── analyzers/                  # Market analyzer
+├── analysis_logs/            # Hasil analisis (JSON)
+└── config/                    # Konfigurasi
+```
+
+## ⚠️ Limitations & Disclaimer
+
+1. **Akurasi ML ~40%** - Normal untuk prediksi pasar
+2. **Bukan financial advice** - Gunakan untuk research saja
+3. **Market risk** - Saham memiliki risiko tinggi
+4. **Data delay** - Data dari yfinance ada delay
+
+## 🔧 Troubleshooting
+
+### Gemini API Error:
+- Check API key di .env
+- Pastikan quota masih ada
+
+### No Stock Data:
+- Check internet connection
+- Yahoo Finance sedang maintenance
+
+### ML Model Not Loaded:
+- Jalankan training script dulu
+- Check model files di ml_system/models/
+
+## 💡 Tips Penggunaan
+
+1. **Best Time**: Jam 09:00-15:30 WIB (market hours)
+2. **Combine Methods**: Gunakan semua 3 metode analisis
+3. **Risk Management**: Selalu gunakan stop-loss
+4. **Diversify**: Jangan fokus ke 1 saham saja
+
+## 📞 Support
+
+Check `analysis_logs/` untuk detail hasil analisis.
+Lihat `docs/` untuk dokumentasi teknis.
+
+---
+
+**© 2024 - Bot Analisis Saham Indonesia**
+*Untuk edukasi dan research purposes only*
