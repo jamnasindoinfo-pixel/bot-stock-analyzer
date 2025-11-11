@@ -1,77 +1,73 @@
 {
-  "current": {
-    "symbol": "BBCA",
-    "timeframe": "M5",
-    "candles": 100,
-    "symbol_aliases": {},
-    "instrument_type": "stock",
-    "stock_strategy": {
-      "ema_short": 10,
-      "ema_long": 30,
-      "rsi_period": 14,
-      "rsi_overbought": 70,
-      "rsi_oversold": 30,
-      "volume_threshold": 1.2,
-      "atr_multiplier": 1.0,
-      "enable": true,
-      "lookback_breakout": 20,
-      "volume_multiplier": 1.5,
-      "atr_period": 14
-    },
-    "strategy_profile": "aggressive",
-    "min_signal_strength": 0.2
+  "app": {
+    "name": "Bot Stock Market Indonesia",
+    "version": "2.0.0",
+    "debug": false
   },
-  "narrative_analysis": {
-    "enabled": true,
-    "default_temperature": 0.5,
-    "max_tokens": 2000,
-    "model": "gemini-1.5-flash",
-    "sections": [
-      "executive_summary",
-      "growth_analysis",
-      "financial_health",
-      "strategic_initiatives",
-      "risk_factors",
-      "outlook"
-    ],
-    "data_sources": [
-      "yfinance",
-      "technical_indicators",
-      "ml_predictions_v5"
-    ],
-    "cache_duration_hours": 1,
-    "include_ml_insights": true,
-    "include_quarterly_data": true,
-    "language": "id"
+  "api": {
+    "timeout": 30,
+    "retry_attempts": 3,
+    "rate_limit_per_minute": 60
   },
-  "strategy_profiles": {
-    "aggressive": {
-      "label": "Aggressive",
-      "description": "High risk, high reward strategy",
-      "params": {
-        "ema_short": 10,
-        "ema_long": 30,
-        "rsi_period": 14,
-        "rsi_overbought": 70,
-        "rsi_oversold": 30,
-        "volume_threshold": 1.2,
-        "atr_multiplier": 1.0
-      },
-      "min_threshold": 0.2
-    },
-    "conservative": {
-      "label": "Conservative",
-      "description": "Low risk, steady gains strategy",
-      "params": {
-        "ema_short": 20,
-        "ema_long": 50,
-        "rsi_period": 14,
-        "rsi_overbought": 60,
-        "rsi_oversold": 40,
-        "volume_threshold": 2.0,
-        "atr_multiplier": 2.0
-      },
-      "min_threshold": 0.5
+  "analysis": {
+    "default_stocks": [
+      "BBCA.JK", "BBRI.JK", "BBNI.JK", "BMRI.JK", "TLKM.JK",
+      "INDF.JK", "UNVR.JK", "ASII.JK", "ICBP.JK", "KLBF.JK"
+    ],
+    "max_stocks_analysis": 50,
+    "min_data_points": 100,
+    "risk_threshold": 0.05
+  },
+  "ml": {
+    "model_path": "ml_system/models/",
+    "feature_count": 43,
+    "validation_split": 0.2,
+    "confidence_threshold": 0.6,
+    "ensemble_weights": {
+      "random_forest": 0.4,
+      "xgboost": 0.4,
+      "lstm": 0.2
     }
+  },
+  "technical": {
+    "indicators": {
+      "rsi_period": 14,
+      "macd_fast": 12,
+      "macd_slow": 26,
+      "macd_signal": 9,
+      "sma_short": 5,
+      "sma_medium": 20,
+      "bb_period": 20,
+      "bb_std": 2
+    },
+    "thresholds": {
+      "oversold_rsi": 30,
+      "overbought_rsi": 70,
+      "volume_spike": 1.5,
+      "price_change_small": 0.01,
+      "price_change_large": 0.03
+    }
+  },
+  "trading": {
+    "stop_loss_percent": 0.03,
+    "take_profit_percent": 0.05,
+    "max_position_size": 0.1,
+    "portfolio_cash_ratio": 0.4
+  },
+  "logging": {
+    "level": "INFO",
+    "save_analysis": true,
+    "log_dir": "analysis_logs/",
+    "model_save_dir": "models/",
+    "backup_dir": "backup/"
+  },
+  "sectors": {
+    "Banking": ["BBCA.JK", "BBRI.JK", "BBNI.JK", "BMRI.JK", "BRIS.JK", "BJBR.JK"],
+    "Technology": ["TLKM.JK", "EXCL.JK", "ISAT.JK", "GOTO.JK", "BUKA.JK"],
+    "Consumer": ["INDF.JK", "UNVR.JK", "ICBP.JK", "KLBF.JK", "MYOR.JK"],
+    "Infrastructure": ["ASII.JK", "PTPP.JK", "WIKA.JK", "ADHI.JK", "TOWR.JK"],
+    "Mining": ["ANTM.JK", "PTBA.JK", "TINS.JK", "SMGR.JK", "INCO.JK"],
+    "Property": ["BSDE.JK", "PWON.JK", "CTRA.JK", "LPKR.JK"],
+    "Energy": ["PGAS.JK", "HRUM.JK", "MEDC.JK"]
   }
 }
