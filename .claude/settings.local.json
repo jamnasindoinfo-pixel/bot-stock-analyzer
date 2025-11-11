@@ -9,7 +9,12 @@
       "Skill(superpowers:using-git-worktrees)",
       "Skill(superpowers:brainstorming)",
       "Bash(timeout:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "Bash(chmod:*)",
+      "Bash(mkdir:*)",
+      "Bash(\"%USERPROFILE%\\.claude\\rules.md\")",
+      "Bash(powershell:*)",
+      "Bash(chcp:*)"
     ],
     "deny": [],
     "ask": []

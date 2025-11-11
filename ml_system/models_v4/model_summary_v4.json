@@ -1,0 +1,59 @@
+{
+  "version": "v4",
+  "trained_at": "2025-11-11T11:03:31.253743",
+  "training_samples": 13931,
+  "validation_samples": 1547,
+  "features": {
+    "total": 50,
+    "selected": 50
+  },
+  "target_distribution": {
+    "1": 11753,
+    "2": 1144,
+    "0": 1034
+  },
+  "target_thresholds": {
+    "buy_threshold_mean": 0.019999999999999997,
+    "sell_threshold_mean": -0.019999999999999997,
+    "volatility_mean": 0.0
+  },
+  "model_performance": {
+    "rf": {
+      "accuracy": "0.790",
+      "log_loss": "0.791",
+      "training_time": "39.20s"
+    },
+    "xgb": {
+      "accuracy": "0.816",
+      "log_loss": "0.622",
+      "training_time": "43.88s"
+    },
+    "gb": {
+      "accuracy": "0.816",
+      "log_loss": "0.637",
+      "training_time": "136.77s"
+    },
+    "lr": {
+      "accuracy": "0.363",
+      "log_loss": "1.110",
+      "training_time": "14.17s"
+    },
+    "ensemble": {
+      "accuracy": "0.816",
+      "log_loss": "0.614",
+      "training_time": "174.29s"
+    }
+  },
+  "top_features": {
+    "volatility_20d": 0.03703657449493615,
+    "sma_200": 0.036048860610884755,
+    "atr_ratio": 0.032269347345258395,
+    "rsi_21": 0.02973958928821326,
+    "macd_histogram": 0.02916102336150823,
+    "volatility_5d": 0.02914207543838813,
+    "volatility_10d": 0.028122681750776514,
+    "bb_width_10_1.5": 0.02768119245660409,
+    "minus_di": 0.027563978992446996,
+    "plus_di": 0.026460654007045704
+  }
+}

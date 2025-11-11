@@ -1,9 +1,0 @@
-{
-  "total_stocks": 15,
-  "successful_trainings": 15,
-  "success_rate": 1.0,
-  "training_date": "2025-11-07T14:44:52.499980",
-  "average_validation_accuracy": 0.33964912280701753,
-  "max_validation_accuracy": 0.49473684210526314,
-  "min_validation_accuracy": 0.14736842105263157
-}

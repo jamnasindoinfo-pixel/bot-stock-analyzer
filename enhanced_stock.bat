@@ -1,6 +1,13 @@
 @echo off
-REM Enhanced Stock Signal CLI Launcher with ML Integration
-REM Usage: enhanced_stock.bat
+REM Enhanced Stock Signal CLI Launcher v5 with ML v5 Integration
+REM Uses latest ML v5 models (83.1% accuracy)
+REM Usage: enhanced_stock.bat [options]
+REM
+REM Examples:
+REM   enhanced_stock.bat                    - Run comprehensive analysis
+REM   enhanced_stock.bat -s BBCA.JK         - Analyze single stock
+REM   enhanced_stock.bat --train           - Train ML models
+REM   enhanced_stock.bat --status          - Show system status
 
 setlocal enabledelayedexpansion
 
@@ -12,6 +19,13 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
+
+echo Enhanced Stock Signal Programs
+echo Using Machine Learning
+echo PT Jaminan Nasional Indonesia
+echo Developed by: Muklis
+echo Version: 1.0.0
+echo.
 
 REM Execute the enhanced CLI
 python "scripts\enhanced_stock_signal_cli.py" %*

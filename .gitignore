@@ -57,3 +57,5 @@ dist/
 # Git worktrees
 .worktrees/nul
 .worktrees/
+*.joblib
+data_cache/

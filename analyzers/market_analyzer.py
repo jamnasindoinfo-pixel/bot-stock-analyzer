@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import logging
 from datetime import datetime, timedelta
 import yfinance as yf
 from typing import Dict, Optional, List, Tuple
@@ -16,7 +17,7 @@ from copy import deepcopy
 # ML Integration
 try:
     sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-    from ml_system.core.ml_predictor import MLPredictor
+    from ml_system.core.ml_predictor_v4 import MLPredictorV4 as MLPredictor
     ML_AVAILABLE = True
 except ImportError:
     ML_AVAILABLE = False
@@ -28,6 +29,10 @@ except ImportError:
         def predict_signal(self, df, symbol):
             return None
 
+# Initialize logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 class MarketAnalyzer:
     def __init__(self, news_api_key: str = None, te_key: str = None):
         self.news_api_key = news_api_key
@@ -36,7 +41,21 @@ class MarketAnalyzer:
 
         # Initialize ML Predictor
         self.ml_predictor = MLPredictor()
-        print(f"[INFO] ML Predictor Status: {'ENABLED' if self.ml_predictor.is_enabled() else 'DISABLED'}")
+
+        # Try to load ML v5 models
+        if ML_AVAILABLE:
+            try:
+                import os
+                model_path = os.path.join(os.path.dirname(__file__), '..', 'ml_system', 'models_v5', 'ml_predictor_v5_idx_20251111_113837.joblib')
+                if os.path.exists(model_path):
+                    self.ml_predictor.load_models(model_path)
+                    print(f"[INFO] Loaded ML v5 models from: {model_path}")
+                else:
+                    print("[WARNING] ML v5 models not found")
+            except Exception as e:
+                print(f"[ERROR] Failed to load ML models: {e}")
+
+        print(f"[INFO] ML Predictor Status: {'ENABLED' if self.ml_predictor.trained else 'DISABLED'}")
         
     def analyze_market(self, df: pd.DataFrame, symbol: str, config: dict = None) -> Dict:
         """Comprehensive market analysis dengan mode aggressive"""
@@ -456,11 +475,12 @@ class MarketAnalyzer:
         }
 
     def _analyze_stock_breakout(self, df: pd.DataFrame, params: Dict) -> Dict:
-        if df.empty or len(df) < max(params.get('ema_slow', 50), params.get('lookback_breakout', 20)) + 1:
+        if df.empty or len(df) < max(params.get('ema_long', 50), params.get('lookback_breakout', 20)) + 1:
             return {'signal': 'WAIT', 'reasons': [], 'volume_ratio': 0, 'trend': 'FLAT'}
 
-        ema_fast = params.get('ema_fast', 20)
-        ema_slow = params.get('ema_slow', 50)
+        # Handle both parameter naming conventions
+        ema_fast = params.get('ema_fast') or params.get('ema_short', 20)
+        ema_slow = params.get('ema_slow') or params.get('ema_long', 50)
         lookback = params.get('lookback_breakout', 20)
         volume_multiplier = params.get('volume_multiplier', 1.5)
         atr_period = params.get('atr_period', 14)
@@ -842,27 +862,69 @@ class MarketAnalyzer:
 
     # ============== ML INTEGRATION METHODS ==============
 
+    def _create_ml_error(self, error_msg: str) -> Dict:
+        """Create standardized ML error response"""
+        return {
+            'signal': 'WAIT',
+            'confidence': 0.0,
+            'available': False,
+            'reason': f'ML error: {error_msg}'
+        }
+
     def _analyze_with_ml(self, df: pd.DataFrame, symbol: str) -> Dict:
         """Analyze using ML predictor"""
-        if not self.ml_predictor.is_enabled():
+        if not self.ml_predictor.trained:
             return {
                 'signal': 'WAIT',
                 'confidence': 0.0,
                 'available': False,
-                'reason': 'ML model not available'
+                'reason': 'ML model not trained'
             }
 
         try:
-            ml_prediction = self.ml_predictor.predict_signal(df, symbol)
+            # Ensure DataFrame has the correct column names expected by MLPredictorV4
+            # The fetch from Yahoo Finance returns lowercase columns, but ML predictor expects capitalized
+            df_ml = df.copy()
+            if df_ml is not None and not df_ml.empty:
+                # Rename columns to match what MLPredictorV4 expects
+                column_mapping = {
+                    'open': 'Open',
+                    'high': 'High',
+                    'low': 'Low',
+                    'close': 'Close',
+                    'tick_volume': 'Volume',
+                    'volume': 'Volume'  # Handle both cases
+                }
+                df_ml = df_ml.rename(columns={k: v for k, v in column_mapping.items() if k in df_ml.columns})
 
-            if ml_prediction and ml_prediction.get('success', False):
+                # Ensure we have the required columns
+                required_cols = ['Open', 'High', 'Low', 'Close', 'Volume']
+                missing_cols = [col for col in required_cols if col not in df_ml.columns]
+                if missing_cols:
+                    logger.warning(f"Missing required columns for ML prediction: {missing_cols}")
+                    return self._create_ml_error(f"Missing columns: {missing_cols}")
+
+                # ML prediction needs at least 300 rows to have enough data after feature creation
+                # We use tail(500) to ensure we have sufficient data for reliable predictions
+                min_rows_needed = 300
+                df_for_ml = df_ml.tail(500) if len(df_ml) >= 500 else df_ml
+
+                if len(df_for_ml) < min_rows_needed:
+                    logger.warning(f"Insufficient data for ML prediction: {len(df_for_ml)} < {min_rows_needed}")
+                    return self._create_ml_error(f"Insufficient data: need {min_rows_needed} rows, have {len(df_for_ml)}")
+
+                ml_prediction = self.ml_predictor.predict(df_for_ml)
+            else:
+                return self._create_ml_error("Empty DataFrame")
+
+            if 'predictions' in ml_prediction and ml_prediction['predictions']:
+                latest = ml_prediction['predictions'][-1]
                 return {
-                    'signal': ml_prediction['signal'],
-                    'confidence': ml_prediction['confidence'],
+                    'signal': latest['signal'],
+                    'confidence': latest['confidence'],
                     'available': True,
-                    'reason': f'ML prediction with {ml_prediction["confidence"]:.3f} confidence',
-                    'current_price': ml_prediction.get('current_price', 0),
-                    'probabilities': ml_prediction.get('probabilities', {})
+                    'reason': f'ML prediction with {latest["confidence"]:.3f} confidence',
+                    'current_price': df_ml['Close'].iloc[-1] if not df_ml.empty else 0
                 }
             else:
                 return {
