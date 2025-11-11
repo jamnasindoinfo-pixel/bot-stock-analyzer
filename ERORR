@@ -1,7 +1,0 @@
-  Layanan         Status
- ──────────────────────────
-  Yahoo Finance   HTTP 401
-  NewsAPI         OK
-  Internet        OK
-
-pada saat menjalankan langsung di terminal menggunakan command python stock_signal.py tidak ada eror yang muncul, tapi saat dijalankan di Exe setelah build exe, ada eror dia tas, hal ini menandakan adanya eror pada saat build. saya ingin user bisa memasukan API key mereka sendiri, tidak memakai API key saya, fix issue ini

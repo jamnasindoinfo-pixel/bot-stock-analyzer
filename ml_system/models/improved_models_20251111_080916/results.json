@@ -1,0 +1,34 @@
+{
+  "timestamp": "20251111_080916",
+  "training_samples": 3005,
+  "validation_samples": 601,
+  "feature_count": 19,
+  "models": {
+    "random_forest": {
+      "train_accuracy": 0.7973377703826955,
+      "validation_accuracy": 0.4043261231281198
+    },
+    "xgboost": {
+      "train_accuracy": 0.9986688851913478,
+      "validation_accuracy": 0.3843594009983361
+    }
+  },
+  "ensemble_accuracy": 0.40765391014975044,
+  "feature_importances": {
+    "volatility_5d": 0.08134077543781464,
+    "volatility_20d": 0.08001490582030389,
+    "macd": 0.06958148677224404,
+    "returns_1d": 0.06345376046918848,
+    "price_vs_sma5": 0.05942221054864658,
+    "volume_ratio": 0.058144971008560614,
+    "Volume": 0.0568643557735694,
+    "bb_position": 0.054259906184305165,
+    "returns_5d": 0.053407575119248485,
+    "returns_10d": 0.05320603295255886
+  },
+  "target_distribution": {
+    "2": 1202,
+    "0": 1202,
+    "1": 1202
+  }
+}

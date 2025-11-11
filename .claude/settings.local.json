@@ -7,7 +7,9 @@
       "Bash(git commit:*)",
       "Bash(git tag:*)",
       "Skill(superpowers:using-git-worktrees)",
-      "Skill(superpowers:brainstorming)"
+      "Skill(superpowers:brainstorming)",
+      "Bash(timeout:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []
